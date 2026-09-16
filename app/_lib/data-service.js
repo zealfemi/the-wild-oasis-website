@@ -133,35 +133,50 @@ export async function getSettings() {
     throw new Error("Settings could not be loaded");
   }
 
+  // For testing
+  // await new Promise((res) => setTimeout(res, 3000));
+
   return data;
 }
 
 export async function getCountries() {
   try {
     const res = await fetch(
-      "https://api.restcountries.com/countries/v5?response_fields=names.common,flag.emoji",
-      {
-        headers: {
-          Authorization: "Bearer rc_live_demo",
-        },
-      },
+      "https://countries.dev/countries?fields=name%2Cflag",
     );
-    const result = await res.json();
-    const list = Array.isArray(result) ? result : [];
 
-    // Map v5 response structure to match expected { name, flag } properties
-    return list.map((c) => ({
-      name: c.names?.common,
-      flag: c.flag?.emoji,
-    }));
-  } catch (error) {
-    console.error("Failed to fetch countries:", error);
-    return [];
+    const countries = await res.json();
+    return countries;
+  } catch {
+    throw new Error("Could not fetch countries");
   }
 }
 
 // export async function getCountries() {
+//   try {
+//     const res = await fetch(
+//       "https://api.restcountries.com/countries/v5?response_fields=names.common,flag.emoji",
+//       {
+//         headers: {
+//           Authorization: "Bearer rc_live_demo",
+//         },
+//       },
+//     );
+//     const result = await res.json();
+//     const list = Array.isArray(result) ? result : [];
 
+//     // Map v5 response structure to match expected { name, flag } properties
+//     return list.map((c) => ({
+//       name: c.names?.common,
+//       flag: c.flag?.emoji,
+//     }));
+//   } catch (error) {
+//     console.error("Failed to fetch countries:", error);
+//     return [];
+//   }
+// }
+
+// export async function getCountries() {
 //   try {
 //     const res = await fetch(
 //       "https://restcountries.com/v3.1/all?fields=name,flags",
